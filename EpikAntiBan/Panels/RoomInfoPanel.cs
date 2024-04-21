@@ -12,8 +12,8 @@ namespace EpikAntiBan.Panels
         public override string Name => "Room Info";
         public override int MinWidth => 25;
         public override int MinHeight => 100;
-        public override Vector2 DefaultAnchorMin => new(0.025f, 0.025f);
-        public override Vector2 DefaultAnchorMax => new(0.20f, 0.20f);
+        public override Vector2 DefaultAnchorMin => new(0.03f, 0.025f);
+        public override Vector2 DefaultAnchorMax => new(0.30f, 0.20f);
         public override bool CanDragAndResize => true;
 
         public Text RoomInfoText;
@@ -27,6 +27,7 @@ namespace EpikAntiBan.Panels
         public const string RoomInfoTemplate =
             "Code: {0}\n" +
             "Is Modded: {1}\n" +
-            "Gamemode: {2}\n";
+            "Gamemode: {2}\n" +
+            "Players: {3}/10";
     }
 }

@@ -7,13 +7,16 @@ namespace EpikAntiBan
 {
     public class PunCallbacks : MonoBehaviourPunCallbacks
     {
-        private void Update()
+        private void LateUpdate()
         {
-            GorillaTaggerPatch.RoomInfoPanel.RoomInfoText.text = PhotonNetwork.InRoom ?
+            var room = PhotonNetwork.CurrentRoom ?? null;
+            GorillaTaggerPatch.RoomInfoPanel.RoomInfoText.text =
+                room is object ?
                 string.Format(RoomInfoPanel.RoomInfoTemplate,
-                PhotonNetwork.CurrentRoom.Name,
-                PhotonNetwork.CurrentRoom.CustomProperties["gameMode"].ToString().Contains("MODDED_"),
-                PhotonNetwork.CurrentRoom.CustomProperties["gameMode"]
+                        room.Name,
+                        room.CustomProperties["gameMode"].ToString().Contains("MODDED_"),
+                        room.CustomProperties["gameMode"],
+                        room.PlayerCount
                 ) : "Not in room!";
         }
 
@@ -21,7 +24,9 @@ namespace EpikAntiBan
         {
             if (propertiesThatChanged.TryGetValue("gameMode", out object gameMode))
             {
-                MonkeNotificationLib.NotificationController.AppendMessage("EpikAntiBan", "The gamemode has changed unexpectedly. " + gameMode, false, 6);
+                string LogMessage = "The gamemode has changed unexpectedly. " + gameMode;
+                Main.Logger.LogMessage(LogMessage);
+                Main.Logger.LogFatal(LogMessage);
                 PhotonNetwork.Disconnect();
             }
         }
